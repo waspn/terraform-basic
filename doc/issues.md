@@ -69,3 +69,4 @@ https://console.aws.amazon.com/support/home?#/
    * [AppSync Datasource](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html)
    * [HTTP Config](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-httpconfig.html)
    * [Authorization Config](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-authorizationconfig.html)
+ * Reference: [Dmitry Lozitskiy - Publish messages to SNS Topic using AppSync resolvers with HTTP datasources](https://dlozitskiy.medium.com/publish-messages-to-sns-topic-using-appsync-resolvers-with-http-datasources-7291cb040dab)

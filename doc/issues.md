@@ -26,3 +26,46 @@ https://console.aws.amazon.com/support/home?#/
 * https://github.com/hashicorp/terraform-provider-aws/issues/11678
 * Found that cannot create or update a global table if the local table has an item in it.
 * Workaround -> Currently need to clear data in table that use as global table before deploy new resource
+
+## Terraform cannot create data source with authorization config
+* https://github.com/hashicorp/terraform/issues/22321
+* https://github.com/hashicorp/terraform-provider-aws/pull/13080
+* From the document and opened issue on githib, Terraform doesn't support the authorization config block on HTTP data source (currently support only HTTP endpoint)
+* Workaround: use [cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack) to create this instead
+* Step to create the resource by cloudformation_stack
+  * Create a resource `aws_cloudformation_stack` with attribute `name` and `template_body`
+  ```
+  resource "aws_cloudformation_stack" "datasource_with_auth_config" {
+   name = "DatasourceAuthConfig"
+   template_body = file("../assets/template/datasource_auth_config.json")
+  }
+  ```
+  * For the `template_body`, use the path of JSON file consist of configuration value
+  ```
+  {
+   "Resources": {
+     "DatasourceAuthConfig": { // <- use the same name as config in the tf file
+       "Type": "AWS::AppSync::DataSource",
+       "Properties": {
+         "ApiId": "APPSYNC_API_ID",
+         "HttpConfig": {
+           "AuthorizationConfig": {
+            "AuthorizationType": "AWS_IAM",
+            "AwsIamConfig": {
+              "SigningRegion": "APPSYNC_REGION",
+              "SigningServiceName": "sns"
+           }
+         },
+         "Endpoint": "SNS_ENDPOINT"
+        },
+        "Name": "HTTP_SNS_IAM",
+        "ServiceRoleArn": "ROLE_ARN",
+        "Type": "HTTP"
+      }
+    }
+  }
+  ```
+ * The configuration value can be seen on the document
+   * [AppSync Datasource](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html)
+   * [HTTP Config](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-httpconfig.html)
+   * [Authorization Config](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-authorizationconfig.html)

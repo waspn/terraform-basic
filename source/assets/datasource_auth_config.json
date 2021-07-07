@@ -1,0 +1,22 @@
+{
+ "Resources": {
+   "DatasourceAuthConfig": {
+     "Type": "AWS::AppSync::DataSource",
+     "Properties": {
+       "ApiId": "APPSYNC_API_ID",
+       "HttpConfig": {
+         "AuthorizationConfig": {
+          "AuthorizationType": "AWS_IAM",
+          "AwsIamConfig": {
+            "SigningRegion": "APPSYNC_REGION",
+            "SigningServiceName": "sns"
+         }
+       },
+       "Endpoint": "SNS_ENDPOINT"
+      },
+      "Name": "HTTP_SNS_IAM",
+      "ServiceRoleArn": "ROLE_ARN",
+      "Type": "HTTP"
+    }
+  }
+}

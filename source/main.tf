@@ -35,3 +35,9 @@ module "dynamodb" {
   source = "./modules/dynamodb"
   # additonal input variable can be added more
 }
+ 
+# create a datasource with HTTP auth configuration
+resource "aws_cloudformation_stack" "datasource_with_auth_config" {
+ name = "DatasourceAuthConfig"
+ template_body = file("../assets/template/datasource_auth_config.json")
+}

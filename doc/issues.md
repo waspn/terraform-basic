@@ -70,3 +70,23 @@ https://console.aws.amazon.com/support/home?#/
    * [HTTP Config](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-httpconfig.html)
    * [Authorization Config](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appsync-datasource-authorizationconfig.html)
  * Reference: [Dmitry Lozitskiy - Publish messages to SNS Topic using AppSync resolvers with HTTP datasources](https://dlozitskiy.medium.com/publish-messages-to-sns-topic-using-appsync-resolvers-with-http-datasources-7291cb040dab)
+ * Another solution is using the Terraform **Provisioner** to create an executable script inside the resource with a `null_resource`
+ * Step to creating
+  * Create a `null_resource`
+		* Add block Provisioner `"local-exec"` with attribute command 
+		* Add an AWS create data source command into this field 
+		* The resource will be look like this and it will contain in the state as a resource ID (only value that can be referenced to this resource)
+
+   ```
+   resource "null_resource" "custom_auth_config_datasource" {
+       provisioner "local-exec" {
+       command = "RESOURCE_CREATE_COMMAND"
+     }
+   }
+   ```
+   
+ * References
+	 * [Provisioner usage](https://www.terraform.io/docs/language/resources/provisioners/syntax.html)
+	 * [Add provisioner to null_resource](https://www.terraform.io/docs/language/resources/provisioners/null_resource.html)
+	 * [Terraform null resource](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource)
+   
